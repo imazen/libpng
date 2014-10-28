@@ -50,9 +50,9 @@ install:
   # fetch deps
   - nuget install zlib-%tbs_tools%-%tbs_arch%-master -Source https://ci.appveyor.com/nuget/zlib-94hmpf3q011d
   - move zlib* zlib
-  - del zlib\*.dll*
-  - ps: if($env:tbs_tools -eq 'msvc12') { move zlib\zlibstatic.lib zlib\zlib.lib -force }
-
+  - if [%tbs_tools%]==[mingw] move zlib\libzlibstatic.a zlib\libz.a
+  - if [%tbs_tools%]==[msvc12] move zlib\zlibstatic.lib zlib\zlib.lib
+  
   - SET tbsd_zlib_built=1
   - SET tbsd_zlib_incdir=zlib
   - SET tbsd_zlib_libdir=zlib
