@@ -1,5 +1,6 @@
 @echo off
 rem thumbs wrapper for windows; see main file for details
+rem meant to be run from the root dir: /scripts/thumbs
 
 
 rem find bash from git
@@ -34,4 +35,4 @@ for %%i in (zlib) do (
   )
 )
 
-bash -c "%exports%./thumbs %*"
+bash -c "%exports%./scripts/thumbs %*"
