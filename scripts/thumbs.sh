@@ -7,7 +7,7 @@
 
 # Basic usage on *nix:
 # export tbs_arch=x86
-# ./thumbs make
+# ./thumbs.sh make
 
 
 # On Win (msvc 2013):
@@ -52,7 +52,7 @@ zname=zlib.lib
 
 deps+=(zlib)
 targ+=(zlibstatic)
-post+=("cp -u \$(./thumbs list_slib) ../../deps/$zname")
+post+=("cp -u \$(./thumbs.sh list_slib) ../../deps/$zname")
 
 # -----------
 # dep processor
@@ -77,10 +77,10 @@ process_deps()
     then
       git clone ${!i_dep_repo} --depth 1
       cd $dep || exit 1
-      ./thumbs make ${targ[$key]} || exit 1
+      ./thumbs.sh make ${targ[$key]} || exit 1
       
       # copy any includes and do poststep
-      cp -u $(./thumbs list_inc) ../../deps
+      cp -u $(./thumbs.sh list_inc) ../../deps
       eval ${post[$key]}
       
       # look in both local and parent dep dirs
@@ -121,7 +121,7 @@ postproc_deps()
 if [ $# -lt 1 ]
 then
   echo ""
-  echo " Usage : ./thumbs [command]"
+  echo " Usage : ./thumbs.sh [command]"
   echo ""
   echo " Commands:"
   echo "   make [target]   - builds everything"
