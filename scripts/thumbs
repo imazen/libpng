@@ -126,6 +126,8 @@ then
   echo " Commands:"
   echo "   make [target]   - builds everything"
   echo "   check           - runs tests"
+  echo "   check2          - download and run all pngsuite tests"
+  echo "                     www.schaik.com/pngsuite/PngSuite-2013jan13.zip"
   echo "   clean           - removes build files"
   echo "   list            - echo paths to any interesting files"
   echo "                     space separated; relative"
@@ -155,6 +157,7 @@ l_dlib=
 l_bin=
 list=
 
+pngtest=build/pngtest
 make=
 c_flags=
 cm_tools=
@@ -174,6 +177,7 @@ msvc12)
   cm_tools="Visual Studio 12"
   [ "$target" = "" ] && mstrg="libpng.sln" || mstrg="$target.vcxproj"
   make="msbuild.exe $mstrg //p:Configuration=$tbs_conf //v:m"
+  pngtest="build/$tbs_conf/pngtest"
   l_slib="./build/$tbs_conf/libpng${ver}_static$csx.lib"
   l_dlib="./build/$tbs_conf/libpng$ver$csx.lib"
   l_bin="./build/$tbs_conf/libpng$ver$csx.dll"
@@ -244,7 +248,22 @@ check)
   ctest . || exit 1
   cd .. ;;
   
+check2)
+  curl -sS -o pngsuite.zip http://www.schaik.com/pngsuite/PngSuite-2013jan13.zip > /dev/null || exit 1
+  unzip -o pngsuite.zip -d pngsuite || exit 1
+  cd pngsuite
+  
+  # test all except x*.png; invalid files
+  echo "" > CTestTestfile.cmake
+  for pic in *.png; do
+    [ ${pic:0:1} == "x" ] || echo "add_test(pngstest_${pic%.*} \"../build/pngstest\" \"$pic\")" >> CTestTestfile.cmake
+  done
+  
+  ctest -C $tbs_conf
+  cd .. ;;
+  
 clean)
+  rm -rf pngsuite
   rm -rf deps
   rm -rf build_deps
   rm -rf build ;;
