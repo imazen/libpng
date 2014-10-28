@@ -6,22 +6,22 @@
 
 mkdir out
 
-./scripts/thumbs make
-./scripts/thumbs check
-./scripts/thumbs check2
+./scripts/thumbs.sh make
+./scripts/thumbs.sh check
+./scripts/thumbs.sh check2
 objdump -f build/*.so | grep ^architecture
 ldd build/*.so
-tar -zcf out/libpng-x64.tar.gz --transform 's/.\/build\///;s/.\///' $(./thumbs list)
-./scripts/thumbs clean
+tar -zcf out/libpng-x64.tar.gz --transform 's/.\/build\///;s/.\///' $(./thumbs.sh list)
+./scripts/thumbs.sh clean
 
 sudo apt-get -y update > /dev/null
 sudo apt-get -y install gcc-multilib > /dev/null
 
 export tbs_arch=x86
-./scripts/thumbs make
-./scripts/thumbs check
-./scripts/thumbs check2
+./scripts/thumbs.sh make
+./scripts/thumbs.sh check
+./scripts/thumbs.sh check2
 objdump -f build/*.so | grep ^architecture
 ldd build/*.so
-tar -zcf out/libpng-x86.tar.gz --transform 's/.\/build\///;s/.\///' $(./thumbs list)
-./scripts/thumbs clean
+tar -zcf out/libpng-x86.tar.gz --transform 's/.\/build\///;s/.\///' $(./thumbs.sh list)
+./scripts/thumbs.sh clean

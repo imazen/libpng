@@ -35,4 +35,4 @@ for %%i in (zlib) do (
   )
 )
 
-bash -c "%exports%./scripts/thumbs %*"
+bash -c "%exports%./scripts/thumbs.sh %*"
