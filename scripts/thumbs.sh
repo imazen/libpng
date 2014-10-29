@@ -197,8 +197,8 @@ mingw)
   # allow sh in path; some old cmake/mingw bug?
   cm_args+=(-DCMAKE_SH=)
   
-  l_slib="./build/libpng.a"
-  l_dlib="./build/libpng.dll.a"
+  l_slib="./build/libpng$ver.a"
+  l_dlib="./build/libpng$ver.dll.a"
   l_bin="./build/libpng$ver.dll"
   list="$l_bin $l_slib $l_dlib $l_inc" ;;
 
