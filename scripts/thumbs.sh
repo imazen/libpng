@@ -47,12 +47,16 @@ post=()
 
 [ $tbsd_zlib_repo ]     || export tbsd_zlib_repo="https://github.com/imazen/zlib --branch for-upstream-use --single-branch"
 
+if [[ "$OSTYPE" == "darwin"* ]]; then cp="rsync"
+else cp="cp"
+fi
+
 zname=zlib.lib
 [ $tbs_tools = gnu -o $tbs_tools = mingw ] && zname=libz.a
 
 deps+=(zlib)
 targ+=(zlibstatic)
-post+=("cp -u \$(./thumbs.sh list_slib) ../../deps/$zname")
+post+=("$cp -u \$(./thumbs.sh list_slib) ../../deps/$zname")
 
 # -----------
 # dep processor
@@ -80,7 +84,7 @@ process_deps()
       ./thumbs.sh make ${targ[$key]} || exit 1
       
       # copy any includes and do poststep
-      cp -u $(./thumbs.sh list_inc) ../../deps
+      $cp -u $(./thumbs.sh list_inc) ../../deps
       eval ${post[$key]}
       
       # look in both local and parent dep dirs
