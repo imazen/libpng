@@ -45,7 +45,7 @@ deps=()
 targ=()
 post=()
 
-[ $tbsd_zlib_repo ]     || export tbsd_zlib_repo="https://github.com/imazen/zlib"
+[ $tbsd_zlib_repo ]     || export tbsd_zlib_repo="git clone https://github.com/imazen/zlib_shallow && cd zlib_shallow && git reset --hard b041a7f485778d7f5a49ecb48b591325caa9ae81"
 
 zname=zlib.lib
 [ $tbs_tools = gnu -o $tbs_tools = mingw ] && zname=libz.a
@@ -75,8 +75,7 @@ process_deps()
     
     if [ ${!i_dep_built} -eq 0 ]
     then
-      git clone ${!i_dep_repo} --depth 1
-      cd $dep || exit 1
+      eval ${!i_dep_repo} || exit 1
       ./thumbs.sh make ${targ[$key]} || exit 1
       
       # copy any includes and do poststep

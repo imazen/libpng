@@ -48,7 +48,7 @@ install:
         }
   
   # fetch deps
-  - nuget install zlib-%tbs_tools%-%tbs_arch%-master -Source https://ci.appveyor.com/nuget/zlib-94hmpf3q011d
+  - nuget install zlib-%tbs_tools%-%tbs_arch%-master -Version 1.2.7.2 -Source https://ci.appveyor.com/nuget/zlib-shallow-x0n34b3pfq1b
   - move zlib* zlib
   - if [%tbs_tools%]==[mingw] move zlib\libzlibstatic.a zlib\libz.a
   - if [%tbs_tools%]==[msvc12] move zlib\zlibstatic.lib zlib\zlib.lib
