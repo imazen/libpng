@@ -25,10 +25,10 @@
 # Global settings are stored in env vars
 # Should be inherited
 
-[ $tbs_conf ]           || export tbs_conf=Release
-[ $tbs_arch ]           || export tbs_arch=x64
-[ $tbs_tools ]          || export tbs_tools=gnu
-[ $tbs_static_runtime ] || export tbs_static_runtime=0
+[[ $tbs_conf ]]           || export tbs_conf=Release
+[[ $tbs_arch ]]           || export tbs_arch=x64
+[[ $tbs_tools ]]          || export tbs_tools=gnu
+[[ $tbs_static_runtime ]] || export tbs_static_runtime=0
 
 
 # tbsd_* contains dep related settings
@@ -45,7 +45,7 @@ deps=()
 targ=()
 post=()
 
-[ $tbsd_zlib_repo ]     || export tbsd_zlib_repo="git clone https://github.com/imazen/zlib_shallow && cd zlib_shallow && git reset --hard b041a7f485778d7f5a49ecb48b591325caa9ae81"
+[[ $tbsd_zlib_repo ]]     || export tbsd_zlib_repo="git clone https://github.com/imazen/zlib_shallow ; cd zlib_shallow && git reset --hard b041a7f485778d7f5a49ecb48b591325caa9ae81"
 
 zname=zlib.lib
 [ $tbs_tools = gnu -o $tbs_tools = mingw ] && zname=libz.a
@@ -185,7 +185,7 @@ gnu)
   cm_tools="Unix Makefiles"
   c_flags+=" -fPIC"
   make="make $target"
-  l_slib="./build/libpng.a"
+  l_slib="./build/libpng$ver.a"
   l_dlib="./build/libpng.so.$ver.$rel.0"
   l_bin="$l_dlib"
   list="$l_slib $l_dlib $l_inc" ;;
