@@ -1,8 +1,8 @@
 /* pngimage.c
  *
- * Copyright (c) 2014 John Cunningham Bowler
+ * Copyright (c) 2015 John Cunningham Bowler
  *
- * Last changed in libpng 1.6.10 [March 6, 2014]
+ * Last changed in libpng 1.6.18 [July 23, 2015]
  *
  * This code is released under the libpng license.
  * For conditions of distribution and use, see the disclaimer
@@ -337,6 +337,9 @@ validate_T(void)
  *    In both cases the file data is held in a linked list of buffers - not all
  *    of these are in use at any time.
  */
+#define NEW(type) ((type *)malloc(sizeof (type)))
+#define DELETE(ptr) (free(ptr))
+
 struct buffer_list
 {
    struct buffer_list *next;         /* next buffer in list */
@@ -359,6 +362,25 @@ buffer_init(struct buffer *buffer)
    buffer->first.next = NULL;
    buffer->last = NULL;
    buffer->current = NULL;
+}
+
+static void
+buffer_destroy_list(struct buffer_list *list)
+{
+   if (list != NULL)
+   {
+      struct buffer_list *next = list->next;
+      DELETE(list);
+      buffer_destroy_list(next);
+   }
+}
+
+static void
+buffer_destroy(struct buffer *buffer)
+{
+   struct buffer_list *list = buffer->first.next;
+   buffer_init(buffer);
+   buffer_destroy_list(list);
 }
 
 #ifdef PNG_WRITE_SUPPORTED
@@ -389,8 +411,6 @@ get_buffer(png_structp pp)
 {
    return (struct buffer*)png_get_io_ptr(pp);
 }
-
-#define NEW(type) ((type *)malloc(sizeof (type)))
 
 static struct buffer_list *
 buffer_extend(struct buffer_list *current)
@@ -596,6 +616,17 @@ display_clean(struct display *dp)
    png_destroy_read_struct(&dp->original_pp, &dp->original_ip, NULL);
    /* leave the filename for error detection */
    dp->results = 0; /* reset for next time */
+}
+
+static void
+display_destroy(struct display *dp)
+{
+    /* Release any memory held in the display. */
+#  ifdef PNG_WRITE_SUPPORTED
+      buffer_destroy(&dp->written_file);
+#  endif
+
+   buffer_destroy(&dp->original_file);
 }
 
 static struct display *
@@ -1089,8 +1120,8 @@ compare_read(struct display *dp, int applied_transforms)
          {
             int b;
 
-            case 16: /* Two bytes per component, bit-endian */
-               for (b = (bpp >> 4); b > 0; )
+            case 16: /* Two bytes per component, big-endian */
+               for (b = (bpp >> 4); b > 0; --b)
                {
                   unsigned int sig = (unsigned int)(0xffff0000 >> sig_bits[b]);
 
@@ -1604,6 +1635,9 @@ main(const int argc, const char * const * const argv)
 
          display_clean(&d);
       }
+
+      /* Release allocated memory */
+      display_destroy(&d);
 
       return errors != 0;
    }
