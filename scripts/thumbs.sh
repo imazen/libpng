@@ -45,7 +45,7 @@ deps=()
 targ=()
 post=()
 
-[[ $tbsd_zlib_repo ]]     || export tbsd_zlib_repo="git clone https://github.com/imazen/zlib_shallow ; cd zlib_shallow && git reset --hard b041a7f485778d7f5a49ecb48b591325caa9ae81"
+[[ $tbsd_zlib_repo ]]     || export tbsd_zlib_repo="git clone https://github.com/imazen/zlib_shallow ; cd zlib_shallow && git reset --hard 638262adec2b52e907e5703e4322a7f866896a13"
 
 zname=zlib.lib
 [ $tbs_tools = gnu -o $tbs_tools = mingw ] && zname=libz.a
