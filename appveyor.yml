@@ -1,15 +1,15 @@
-version: 1.6.14.{build}
+version: 1.6.18.{build}
 shallow_clone: true
-
+os: Visual Studio 2015
 
 environment:
   matrix:
     - tbs_arch: "x86"
-      tbs_tools: "msvc12"
+      tbs_tools: "msvc14"
       tbs_static_runtime: 0
     
     - tbs_arch: "x64"
-      tbs_tools: "msvc12"
+      tbs_tools: "msvc14"
       tbs_static_runtime: 0
     
     - tbs_arch: "x86"
@@ -48,10 +48,10 @@ install:
         }
   
   # fetch deps
-  - nuget install zlib-%tbs_tools%-%tbs_arch%-master -Version 1.2.7.2 -Source https://ci.appveyor.com/nuget/zlib-shallow-x0n34b3pfq1b
+  - nuget install zlib-%tbs_tools%-%tbs_arch%-master -Version 1.2.8.4 -Source https://ci.appveyor.com/nuget/zlib-shallow-x0n34b3pfq1b
   - move zlib* zlib
   - if [%tbs_tools%]==[mingw] move zlib\libzlibstatic.a zlib\libz.a
-  - if [%tbs_tools%]==[msvc12] move zlib\zlibstatic.lib zlib\zlib.lib
+  - if [%tbs_tools%]==[msvc14] move zlib\zlibstatic.lib zlib\zlib.lib
   
   - SET tbsd_zlib_built=1
   - SET tbsd_zlib_incdir=zlib
@@ -60,7 +60,7 @@ install:
 
 
 build_script:
-  - '"C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall" %vcvar_arg%'
+  - '"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall" %vcvar_arg%'
   - if [%tbs_tools%]==[mingw] if [%tbs_arch%]==[x86] SET PATH=C:\MinGW\bin;%PATH%
   - if [%tbs_tools%]==[mingw] if [%tbs_arch%]==[x64] SET PATH=C:\mingw64\bin;%PATH%
   
